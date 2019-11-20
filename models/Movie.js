@@ -98,5 +98,5 @@ let count = 0;
 
 stream.on('data', (err, doc) => count++);
 stream.on('close', () => console.log(`Indexed ${count} documents`));
-stream.on('error', err => console.log(err));
+stream.on('error', (err) => console.log(err));
 module.exports = Movie;
