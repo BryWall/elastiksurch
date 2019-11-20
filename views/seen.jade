@@ -1,0 +1,34 @@
+extends layout
+
+block content
+    ul.nav(style='margin-top: 80px').navbar-dark.bg-dark
+        li.nav-item
+            a.nav-link(href='/create') Create
+    form(action="search", method="POST")
+        .form-group
+            label(for="movieSearch") Movie Search
+            input#movieSearch.form-control(name="search", type="text")
+        .form-group
+            .btn-group
+                button.btn.btn-primary(type="submit") Search
+
+    table.table
+        thead
+            th Title
+            th Release Date
+            th IMDb Rating
+            th runtime
+            th seen
+            th
+        tbody
+            each movie in movies
+                tr
+                    td
+                        a(href='/view/#{movie._id}') #{movie.title}
+                    td #{moment(movie.release_date).format('DD/MM/YYYY')}
+                    td #{movie.imdb_rating}
+                    td #{movie.runtime}
+                    td #{movie.seen ? 'Vu' : 'Pas Vu'}
+                    td
+                        a(href='/edit/#{movie._id}') 🖊️
+                        a(href='/delete/#{movie._id}') 🗑️

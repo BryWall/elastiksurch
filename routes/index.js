@@ -35,6 +35,37 @@ router.get('/view/:id', (req, res, next) => {
     res.render('view', { movie })
   });
 });
+
+router.get('/seen', (req, res, next) => {
+  mongoose.model('Movie').search({
+    dis_max: {
+      queries: [
+        {
+          function_score: {
+            query: {
+              match: {
+                'seen': {
+                  query: req.query.q
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }, (err, items) => {
+    if (!err && items) {
+      const movies = items.hits.hits.map(item => {
+        const movie = item._source;
+        movie._id = item._id;
+        movie._score = item._score;
+        return movie;
+      })
+      res.render('seen', { movies })
+    }
+  });
+});
+
 router.get('/edit/:id', (req, res, next) => {
   //Modifier un film
   mongoose.model('Movie').findById(req.params.id, (err, movie) => {
