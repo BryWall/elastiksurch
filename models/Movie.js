@@ -1,42 +1,27 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 const mongoosastic = require('mongoosastic');
-const MovieSchema = new Schema({
+const Schema = mongoose.Schema;
+
+let MovieSchema = new Schema({
     title: {
         type: String,
-        es_indexed: true ,
-        es_fields:{
-            ngram: {type: 'text', analyzer: 'ngram_analyzer'},
-            keyword: {type: 'text', analyzer: 'keyword_analyzer'}
+        es_indexed: true,
+        es_fields : {
+            ngram: { type: 'text', analyzer: 'ngram_analyzer', index: 'analyzed'},
+            keyword: { type: 'text', analyzer: 'keyword_analyzer', index: 'analyzed'}
         }
     },
-    release_date: {
-        type: Date,
+    release_date: { type: Date, es_indexed: true },
+    imdb_rating: { type: Number, es_type: 'float', es_indexed: true},
+    runtime: { type: Number, es_indexed: true },
+    summary: {
+        type: String,
         es_indexed: true,
     },
-    runtime: {
-        type: Number,
-        es_indexed: true,
-    },
-    summary: { type: String,
-        es_indexed: true,
-        es_fields:{
-            ngram: {type: 'text', analyzer: 'ngram_analyzer'},
-            keyword: {type: 'text', analyzer: 'keyword_analyzer'}
-        }
-    },
-    imdb_rating: { type: Number,
-        es_indexed: true ,
-    },
-    actors: [{ type: String,
-        es_indexed: true ,
-        es_fields:{
-            ngram: {type: 'text', analyzer: 'ngram_analyzer'},
-            keyword: {type: 'text', analyzer: 'keyword_analyzer'}
-        }
-    }]
+    seen: { type: Boolean, default: false, es_indexed: true },
 });
 MovieSchema.plugin(mongoosastic);
+
 const Movie = mongoose.model('Movie', MovieSchema);
 
 Movie.createMapping({
@@ -77,13 +62,11 @@ Movie.createMapping({
     console.log(mapping);
 });
 
-
-
-
 const stream = Movie.synchronize();
 let count = 0;
 
 stream.on('data', (err, doc) => count++);
 stream.on('close', () => console.log(`Indexed ${count} documents`));
 stream.on('error', (err) => console.log(err));
+
 module.exports = Movie;

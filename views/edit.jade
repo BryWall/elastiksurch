@@ -1,7 +1,7 @@
 extends layout
 
 block content
-    form(action="create", method="POST")
+    form(action="/edit/#{movie._id}", method="POST")
         .form-group
             label(for="movieTitle") Movie Title
             input#movieTitle.form-control(name="title", type="text", value="#{movie.title}")
@@ -18,7 +18,10 @@ block content
             label(for='releaseDate') Release Date
             input#releaseDate.form-control(name="release_date", type="date", value='#{moment(movie.release_date).format("YYYY-MM-DD")}')
         .form-group
+            input#seen(type="checkbox", name="seen")
+            | Seen ?
+        .form-group
             .btn-group
-                button.btn.btn-primary(type="submit") Create
+                button.btn.btn-primary(type="submit") Edit
                 a(href="/")
                     button.btn.btn-danger(type="button") Cancel

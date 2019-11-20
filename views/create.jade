@@ -18,6 +18,9 @@ block content
             label(for='releaseDate') Release Date
             input#releaseDate.form-control(name="release_date", type="date")
         .form-group
+            input#seen(type="checkbox", name="seen")
+            | Seen ?
+        .form-group
             .btn-group
                 button.btn.btn-primary(type="submit") Create
                 a(href="/")

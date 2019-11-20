@@ -15,6 +15,7 @@ block content
             //- th IMDb Rating
             //- th actors
             //- th runtime
+            th score
             th
         tbody
             each movie in movies
@@ -24,6 +25,8 @@ block content
                     //- td #{moment(movie.release_date).format("DD/MM/YYYY")}
                     //- td #{movie.imdb_rating}
                     //- td #{movie.runtime}
+                    td
+                        #{movie._score}
                     td
                         a(href='/edit/#{movie._id}') 🖊️
                         a(href='/delete/#{movie._id}') 🗑️

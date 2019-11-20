@@ -3,69 +3,73 @@ var router = express.Router();
 const mongoose = require('mongoose');/////////////////////////
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get('/', (req, res, next) => {
 
   // La liste de tous les films
-
-  mongoose.model('Movie').find({}, (err, items) => res.render('index', { movies : items }));
+  mongoose.model('Movie').find({}, (err, items) => res.render('index', { movies: items }));
 });
 
 router.get('/create', (req, res, next) => {
   //Afficher le formulaire de création
   res.render('create');
 });
-
 router.post('/create', (req, res, next) => {
   const movie = req.body;
-  console.log(movie);
+
+  movie.seen = movie.seen === 'on';
+
   mongoose.model('Movie').create(movie, (err, item) => {
     if (!err)
       return res.redirect('/');
+
     console.log(err);
     res.send(err);
   })
 });
-
 router.get('/view/:id', (req, res, next) => {
-  const movie = mongoose.model('Movie').findById(req.params.id, (err,movie) => {
-    if(err)
+  //Afficher un film
+  mongoose.model('Movie').findById(req.params.id, (err, movie) => {
+    if (err)
       return res.send(err);
-    res.render('view', {movie});
+
+    res.render('view', { movie })
   });
 });
-
 router.get('/edit/:id', (req, res, next) => {
-  const movie = mongoose.model('Movie').findById(req.params.id, (err,movie) => {
-    if(err)
+  //Modifier un film
+  mongoose.model('Movie').findById(req.params.id, (err, movie) => {
+    if (err)
       return res.send(err);
-    res.render('edit', {movie});
-  });
 
+    res.render('edit', { movie });
+  });
 });
 router.post('/edit/:id', (req, res, next) => {
-  mongoose.model('Movie').findByIdAndUpdate(req.params.id, (err, movie) => {
-    if(err)
+
+  const movie = req.body;
+
+  movie.seen = movie.seen === 'on';
+  mongoose.model('Movie').findByIdAndUpdate(req.params.id, movie, (err, movie) => {
+    if (err)
       return res.send(err);
+
     res.redirect('/');
   })
-
 });
 router.get('/delete/:id', (req, res, next) => {
-  const movie = mongoose.model('Movie').findById(req.params.id, (err,movie) => {
-    res.render('delete', {movie});
+  //Supprimer un film
+  mongoose.model('Movie').findById(req.params.id, (err, movie) => {
+    res.render('delete', { movie });
   });
-
-});
-
+})
 router.post('/delete/:id', (req, res, next) => {
   mongoose.model('Movie').findByIdAndDelete(req.params.id, (err, movie) => {
-  if(err)
-    return res.send(err);
+    if (err)
+      return res.send(err);
 
-  res.redirect('/');
+    res.redirect('/');
   })
-});
-
+})
 
 router.get('/search', (req, res, next) => {
   mongoose.model('Movie').search({
@@ -77,7 +81,7 @@ router.get('/search', (req, res, next) => {
               match: {
                 'title.ngram': {
                   query: req.query.q,
-                  fuzziness:'AUTO'
+                  fuzziness: 'AUTO'
                 }
               }
             },
@@ -87,10 +91,11 @@ router.get('/search', (req, res, next) => {
           }
         },
         {
-          term: {
+          match: {
             'title.keyword': {
-              'value': req.query.q,
-              'boost': 5,
+              'query': req.query.q,
+              'operator' : 'and',
+              'boost': 5.0,
             }
           }
         }
@@ -101,32 +106,30 @@ router.get('/search', (req, res, next) => {
       const movies = items.hits.hits.map(item => {
         const movie = item._source;
         movie._id = item._id;
+        movie._score = item._score;
         return movie;
-      });
-      res.render('search', {movies});
+      })
+      res.render('search', { movies })
     }
-  })
+  });
 });
 
-router.post('/search', (req, res, next) => {
-  return res.redirect('/search?q='+req.body.search);
-});
 
+
+
+//ça déconne...
 router.get('/fuzzy', (req, res, next) => {
   mongoose.model('Movie').search({
     fuzzy: {
-      'title.ngram' : {
-        value : req.params.q,
-        fuzziness: 2,
-        prefix_length : 3,
-        max_expansions: 5
+      'title.ngram': {
+        value: req.query.q,
+        fuzziness: 'AUTO',
+        prefix_length: 0,
+        max_expansions: 50
       }
     }
-  }, (err, items) => { res.send( err || items) }
-  )
+  }, (err, items) => res.send(err || items));
 });
-
-
 
 // const maFonction = () => {
 //   const promesse = new Promise();
@@ -143,5 +146,10 @@ router.get('/fuzzy', (req, res, next) => {
 //   const mesDonnees = await codeAsync();
 //   return mesDonnees;
 // }
+
+
+router.post('/search', (req, res, next) => {
+  return res.redirect('/search?q='+req.body.search);
+});
 
 module.exports = router;
