@@ -100,7 +100,7 @@ router.get('/search', (req, res, next) => {
         const movie = item._source;
         movie._id = item._id;
         return movie;
-      })
+      });
       res.render('search', {movies});
     }
   })
