@@ -75,7 +75,8 @@ router.get('/search', (req, res, next) => {
             query: {
               match: {
                 'title.ngram': {
-                  query: req.query.q
+                  query: req.query.q,
+                  fuzziness:'AUTO'
                 }
               }
             },
