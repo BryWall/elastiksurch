@@ -16,6 +16,7 @@ block content
             //- th actors
             //- th runtime
             th score
+            th seen
             th
         tbody
             each movie in movies
@@ -27,6 +28,8 @@ block content
                     //- td #{movie.runtime}
                     td
                         #{movie._score}
+                    td
+                        td #{movie.seen ? 'Vu' : 'Pas Vu'}
                     td
                         a(href='/edit/#{movie._id}') 🖊️
                         a(href='/delete/#{movie._id}') 🗑️

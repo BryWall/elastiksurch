@@ -61,7 +61,7 @@ router.get('/seen', (req, res, next) => {
         movie._score = item._score;
         return movie;
       })
-      res.render('seen', { movies })
+      res.render('search', { movies })
     }
   });
 });
