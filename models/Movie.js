@@ -43,7 +43,13 @@ Movie.createMapping({
             ]
         }
     }
-});
+},
+    (err, mapping) => {
+    if(err) {
+        return console.log(err);
+    }
+    console.log(mapping);
+    });
 
 
 
