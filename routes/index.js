@@ -66,21 +66,44 @@ router.post('/delete/:id', (req, res, next) => {
 });
 
 
-router.get('/search', (req,res,next) => {
+router.get('/search', (req, res, next) => {
   mongoose.model('Movie').search({
-    match: {
-      title: req.query.q
+    dis_max: {
+      queries: [
+        {
+          function_score: {
+            query: {
+              match: {
+                'title.ngram': {
+                  query: req.query.q
+                }
+              }
+            },
+            script_score: {
+              script: '_score * 0.7'
+            }
+          }
+        },
+        {
+          term: {
+            'title.keyword': {
+              'value': req.query.q,
+              'boost': 5,
+            }
+          }
+        }
+      ]
     }
   }, (err, items) => {
-    if(!err && items) {
+    if (!err && items) {
       const movies = items.hits.hits.map(item => {
         const movie = item._source;
         movie._id = item._id;
         return movie;
       })
-      res.render('search',{movies})
+      res.render('search', {movies});
     }
-  });
+  })
 });
 
 
