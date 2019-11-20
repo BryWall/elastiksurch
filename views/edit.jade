@@ -1,0 +1,24 @@
+extends layout
+
+block content
+    form(action="create", method="POST")
+        .form-group
+            label(for="movieTitle") Movie Title
+            input#movieTitle.form-control(name="title", type="text", value="#{movie.title}")
+        .form-group
+            label(for='runtime') Runtime
+            input#runtime.form-control(name="runtime", type="number", value="#{movie.runtime}")
+        .form-group
+            label(for='summary') Summary
+            input#summary.form-control(name="summary", type="text", value="#{movie.summary}")
+        .form-group
+            label(for='imdbRating') ImDB Rating
+            input#imdbRating.form-control(name="imdb_rating", type="number", step="0.01", value="#{movie.imdb_rating}")
+        .form-group
+            label(for='releaseDate') Release Date
+            input#releaseDate.form-control(name="release_date", type="date", value='#{moment(movie.release_date).format("YYYY-MM-DD")}')
+        .form-group
+            .btn-group
+                button.btn.btn-primary(type="submit") Create
+                a(href="/")
+                    button.btn.btn-danger(type="button") Cancel

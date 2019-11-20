@@ -1,0 +1,25 @@
+extends layout
+
+block content
+  ul.nav(style='margin-top: 80px').navbar-dark.bg-dark
+    li.nav-item
+      a.nav-link(href='/create') Create
+
+  table.table
+    thead
+      th Title
+      th Release Date
+      th IMDb Rating
+      th runtime
+      th
+    tbody
+      each movie in movies
+        tr
+          td
+            a(href='/view/#{movie._id}') #{movie.title}
+          td #{moment(movie.release_date).format('DD/MM/YYYY')}
+          td #{movie.imdb_rating}
+          td #{movie.runtime}
+          td
+            a(href='/edit/#{movie._id}') 🖊️
+            a(href='/delete/#{movie._id}') 🗑️
