@@ -107,6 +107,28 @@ router.get('/search', (req, res, next) => {
   })
 });
 
+router.get('/fuzzy', (req, res, next) => {
+  mongoose.model('Movie').search({
+    fuzzy: {
+      'title.ngram' : {
+        value : req.params.q,
+        fuzziness: 2,
+        prefix_lenght : 3,
+        max_expensions: 2
+      }
+    }
+  }, (err, items) => {
+    if (!err && items) {
+      const movies = items.hits.hits.map(item => {
+        const movie = item._source;
+        movie._id = item._id;
+        return movie;
+      });
+      res.render('search', {movies});
+    }
+  })
+});
+
 
 
 // const maFonction = () => {
