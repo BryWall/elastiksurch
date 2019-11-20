@@ -3,17 +3,50 @@ const Schema = mongoose.Schema;
 const mongoosastic = require('mongoosastic');
 const MovieSchema = new Schema({
     title: {
-        type : String,
+        type: String,
+        es_indexed: true ,
+        es_fields:{
+            ngram: {type: 'text', analyzer: 'ngram_analyzer'},
+            keyword: {type: 'text:', analyzer: 'keyword_analyzer'}
+        }
+    },
+    release_date: {
+        type: Date,
         es_indexed: true,
         es_fields:{
-            ngrams : { type : 'text', analyzer : 'ngram_analyzer'},
-            keyword: { type: 'text', analyzer: 'keyword_analyzer'}
-        }},
-    release_date: { type : Date, es_indexed: true},
-    runtime: { type : Number, es_indexed: true},
-    summary: { type : String, es_indexed: true},
-    imdb_rating:  { type : Number, es_indexed: true},
-    actors: [ { type : String, es_indexed: true}]
+            ngram: {type: 'text', analyzer: 'ngram_analyzer'},
+            keyword: {type: 'text:', analyzer: 'keyword_analyzer'}
+        }
+    },
+    runtime: {
+        type: Number,
+        es_indexed: true,
+        es_fields:{
+            ngram: {type: 'text', analyzer: 'ngram_analyzer'},
+            keyword: {type: 'text:', analyzer: 'keyword_analyzer'}
+        }
+    },
+    summary: { type: String,
+        es_indexed: true,
+        es_fields:{
+            ngram: {type: 'text', analyzer: 'ngram_analyzer'},
+            keyword: {type: 'text:', analyzer: 'keyword_analyzer'}
+        }
+    },
+    imdb_rating: { type: Number,
+        es_indexed: true ,
+        es_fields:{
+            ngram: {type: 'text', analyzer: 'ngram_analyzer'},
+            keyword: {type: 'text:', analyzer: 'keyword_analyzer'}
+        }
+    },
+    actors: [{ type: String,
+        es_indexed: true ,
+        es_fields:{
+            ngram: {type: 'text', analyzer: 'ngram_analyzer'},
+            keyword: {type: 'text:', analyzer: 'keyword_analyzer'}
+        }
+    }]
 });
 MovieSchema.plugin(mongoosastic);
 const Movie = mongoose.model('Movie', MovieSchema);
