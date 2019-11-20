@@ -21,7 +21,7 @@ Movie.createMapping({
                 max_gram : 10,
             },
             token_chars:[
-                'letter', 'digit', 'symbol', 'ponctuation'
+                'letter', 'digit', 'symbol', 'punctuation'
             ]
         }
     },
