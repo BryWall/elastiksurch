@@ -18,10 +18,28 @@ Movie.createMapping({
             ngram_filter : {
                 type: 'nGram',
                 min_gram : 3,
-                max_gram : 10
+                max_gram : 10,
             },
             token_chars:[
                 'letter', 'digit', 'symbol', 'ponctuation'
+            ]
+        }
+    },
+    analyzer : {
+        ngram_analyzer : {
+            type:'custom',
+            tokenizer:'whitespace',
+            filter : [
+                'lowercase',
+                'asciifolding',
+                'ngram_filter'
+            ]
+        },
+        keyword_analyzer : {
+            tokenizer : 'keyword',
+            filter : [
+                'lowercase',
+                'asciifolding'
             ]
         }
     }
