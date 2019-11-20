@@ -113,8 +113,8 @@ router.get('/fuzzy', (req, res, next) => {
       'title.ngram' : {
         value : req.params.q,
         fuzziness: 2,
-        prefix_lenght : 3,
-        max_expensions: 50
+        prefix_length : 3,
+        max_expansions: 5
       }
     }
   }, (err, items) => { res.send( err || items) }
