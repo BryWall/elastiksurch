@@ -114,19 +114,11 @@ router.get('/fuzzy', (req, res, next) => {
         value : req.params.q,
         fuzziness: 2,
         prefix_lenght : 3,
-        max_expensions: 2
+        max_expensions: 50
       }
     }
-  }, (err, items) => {
-    if (!err && items) {
-      const movies = items.hits.hits.map(item => {
-        const movie = item._source;
-        movie._id = item._id;
-        return movie;
-      });
-      res.render('search', {movies});
-    }
-  })
+  }, (err, items) => { res.send( err || items) }
+  )
 });
 
 
