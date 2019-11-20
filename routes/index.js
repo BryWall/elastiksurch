@@ -17,6 +17,7 @@ router.get('/create', (req, res, next) => {
 
 router.post('/create', (req, res, next) => {
   const movie = req.body;
+  console.log(movie);
   mongoose.model('Movie').create(movie, (err, item) => {
     if (!err)
       return res.redirect('/');
@@ -105,6 +106,10 @@ router.get('/search', (req, res, next) => {
       res.render('search', {movies});
     }
   })
+});
+
+router.post('/search', (req, res, next) => {
+  return res.redirect('/search?q='+req.body.search);
 });
 
 router.get('/fuzzy', (req, res, next) => {

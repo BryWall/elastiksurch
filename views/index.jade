@@ -4,6 +4,13 @@ block content
   ul.nav(style='margin-top: 80px').navbar-dark.bg-dark
     li.nav-item
       a.nav-link(href='/create') Create
+  form(action="search", method="POST")
+    .form-group
+      label(for="movieSearch") Movie Search
+      input#movieSearch.form-control(name="search", type="text")
+    .form-group
+      .btn-group
+        button.btn.btn-primary(type="submit") Search
 
   table.table
     thead
