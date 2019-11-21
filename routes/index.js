@@ -15,7 +15,7 @@ router.get('/create', (req, res, next) => {
 });
 router.post('/create', (req, res, next) => {
   const movie = req.body;
-
+  movie.tags = req.body.tags.split(',');
   movie.seen = movie.seen === 'on';
 
   mongoose.model('Movie').create(movie, (err, item) => {
