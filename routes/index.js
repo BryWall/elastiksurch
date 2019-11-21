@@ -37,23 +37,24 @@ router.get('/view/:id', (req, res, next) => {
 });
 
 router.get('/seen', (req, res, next) => {
-  mongoose.model('Movie').search({
-    dis_max: {
-      queries: [
-        {
-          function_score: {
-            query: {
-              match: {
-                'seen': {
-                  query: req.query.q
-                }
-              }
-            }
-          }
-        }
-      ]
+  let match = req.query.q ? {
+    match: {
+      'title.ngram': {
+        query: req.query.q,
+        fuzziness: 'AUTO'
+      }
     }
-  }, (err, items) => {
+  } : { match_all: {} }
+  const request = {
+    bool: {
+      filter: {
+        term: { seen: req.query.seen === 'true' }
+      },
+      must: match
+    }
+  };
+
+  mongoose.model('Movie').search(request, (err, items) => {
     if (!err && items) {
       const movies = items.hits.hits.map(item => {
         const movie = item._source;
