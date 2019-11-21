@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const mongoose = require('mongoose');/////////////////////////
+const moment = require('moment');
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
@@ -169,6 +170,56 @@ router.get('/search', (req, res, next) => {
 });
 
 
+router.get('/advsearch', (req, res, next) => {
+  res.render('advsearch');
+});
+
+router.post('/advsearch', (req, res, next) => {
+  console.log(req.body);
+
+  let request = {
+    multi_match: {
+      query: req.body.query,
+      fields: [],
+    },
+  };
+
+  if (Array.isArray(req.body.fieled)) {
+    req.body.fields.forEach(field => {
+      request.multi_match.fields.push(`${field}.ngram`);
+      request.multi_match.fields.push(`${field}.keyword`);
+    })
+  } else {
+    request.multi_match.fields.push(`${req.body.fields}.ngram`);
+    request.multi_match.fields.push(`${req.body.fields}.keyword`);
+  }
+
+  if (req.body.date) {
+    request = {
+      bool: {
+        filter: {
+          range: {
+            release_date: {
+              gte: moment(req.body.date).toISOString()
+            }
+          }
+        },
+        must: request
+      }
+    }
+  }
+
+  mongoose.model('Movie').search(request, (err, items) => {
+    const movies = items.hits.hits.map(item => {
+      const movie = item._source;
+      movie._id = item._id;
+      movie._score = item._score;
+      return movie;
+    })
+    res.render('search', { movies })
+  })
+  // res.render('search');
+});
 
 
 //ça déconne...

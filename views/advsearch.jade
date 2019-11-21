@@ -1,0 +1,21 @@
+extends layout
+
+block content
+    h1 Advanced Search
+
+    form(action="advsearch" method="POST")
+        .form-group
+            label(for='query') 🎵 And i still couldn't find what i'm looking for 🎵
+            input#query.form-control(name="query" type="text")
+        .form-group
+            label(for='fields') Fields to search :
+            select#fields.form-control(multiple, name='fields')
+                option(value='title') Title
+                option(value='summary') Summary
+                option(value='tags') Tags
+        .form-group
+            label(for='date') Filter by date
+            input#year.form-control(name='date' type='date')
+        .form-group
+            .btn-group
+                button.btn.btn-primary(type="submit") 🔍
