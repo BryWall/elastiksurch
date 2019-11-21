@@ -111,7 +111,7 @@ router.get('/search', (req, res, next) => {
             query: {
               match: {
                 'title.ngram': {
-                  query: req.query.q,
+                  query: req.query.title,
                   fuzziness: 'AUTO'
                 }
               }
@@ -125,7 +125,7 @@ router.get('/search', (req, res, next) => {
             query: {
               match: {
                 'tags.ngram': {
-                  query: req.query.q,
+                  query: req.query.tags,
                   fuzziness: 'AUTO'
                 }
               }
@@ -138,7 +138,7 @@ router.get('/search', (req, res, next) => {
         {
           match: {
             'title.keyword': {
-              'query': req.query.q,
+              'query': req.query.title,
               'operator' : 'or',
               'boost': 5.0,
             }
@@ -147,7 +147,7 @@ router.get('/search', (req, res, next) => {
         {
           match: {
             'tags.keyword': {
-              'query': req.query.q,
+              'query': req.query.tags,
               'operator' : 'or',
               'boost': 5.0,
             }
@@ -203,7 +203,7 @@ router.get('/fuzzy', (req, res, next) => {
 
 
 router.post('/search', (req, res, next) => {
-  return res.redirect('/search?q='+req.body.search);
+  return res.redirect('/search?title='+req.body.title+'&summary='+req.body.summary+'&tags='+req.body.tags);
 });
 
 module.exports = router;

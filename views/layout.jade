@@ -13,7 +13,9 @@ html
         a.p-2.text-dark(href="/seen?q=true") Vu
         a.p-2.text-dark(href="/seen?q=false") Pas Vu
       form.form-inline.mt-2.mt-md-0(action="/search" method="post")
-        input.form-control.mr-sm-2(type="text" placeholder="search" aria-label="search" name="search")
+        input.form-control.mr-sm-2(type="text" placeholder="title" aria-label="search" name="title")
+        input.form-control.mr-sm-2(type="text" placeholder="summary" aria-label="search" name="summary")
+        input.form-control.mr-sm-2(type="text" placeholder="tags" aria-label="search" name="tags")
         button.btn.btn-outline-success.my-2.my-sm-0(type="submit") Search
     div.container
       block content
