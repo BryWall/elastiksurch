@@ -131,7 +131,7 @@ router.get('/search', (req, res, next) => {
               }
             },
             script_score: {
-              script: '_score * 0.7'
+              script: '_score * 0.5'
             }
           }
         },
@@ -149,7 +149,7 @@ router.get('/search', (req, res, next) => {
             'tags.keyword': {
               'query': req.query.tags,
               'operator' : 'or',
-              'boost': 5.0,
+              'boost': 2.0,
             }
           }
         }
