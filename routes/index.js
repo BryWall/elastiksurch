@@ -121,12 +121,35 @@ router.get('/search', (req, res, next) => {
               script: '_score * 0.7'
             }
           }
+        },{
+          function_score: {
+            query: {
+              match: {
+                'tags.ngram': {
+                  query: req.query.q,
+                  fuzziness: 'AUTO'
+                }
+              }
+            },
+            script_score: {
+              script: '_score * 0.7'
+            }
+          }
         },
         {
           match: {
             'title.keyword': {
               'query': req.query.q,
-              'operator' : 'and',
+              'operator' : 'or',
+              'boost': 5.0,
+            }
+          }
+        },
+        {
+          match: {
+            'tags.keyword': {
+              'query': req.query.q,
+              'operator' : 'or',
               'boost': 5.0,
             }
           }

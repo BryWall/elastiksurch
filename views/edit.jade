@@ -18,6 +18,9 @@ block content
             label(for='releaseDate') Release Date
             input#releaseDate.form-control(name="release_date", type="date", value='#{moment(movie.release_date).format("YYYY-MM-DD")}')
         .form-group
+            label(for='tags') Tags
+            input#tags.form-control(name="tags", type="text", value='#{movie.tags}')
+        .form-group
             input#seen(type="checkbox", name="seen")
             | Seen ?
         .form-group
