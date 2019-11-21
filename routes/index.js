@@ -79,7 +79,7 @@ router.get('/edit/:id', (req, res, next) => {
 router.post('/edit/:id', (req, res, next) => {
 
   const movie = req.body;
-  movie.tags = req.body.tags.split(', ');
+  movie.tags = req.body.tags.split(',');
   movie.seen = movie.seen === 'on';
   mongoose.model('Movie').findByIdAndUpdate(req.params.id, movie, (err, movie) => {
     if (err)
