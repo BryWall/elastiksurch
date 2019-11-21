@@ -19,14 +19,14 @@ let MovieSchema = new Schema({
         es_indexed: true,
     },
     seen: { type: Boolean, default: false, es_indexed: true },
-    tags: {
+    tags: [{
         type: String,
         es_indexed: true,
         es_fields : {
             ngram: { type: 'text', analyzer: 'ngram_analyzer', index: 'analyzed'},
             keyword: { type: 'text', analyzer: 'keyword_analyzer', index: 'analyzed'}
         }
-    }
+    }]
 });
 MovieSchema.plugin(mongoosastic);
 
